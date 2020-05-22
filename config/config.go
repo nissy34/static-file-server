@@ -24,6 +24,9 @@ var (
 		TLSKey      string   `yaml:"tls-key"`
 		URLPrefix   string   `yaml:"url-prefix"`
 		Referrers   []string `yaml:"referrers"`
+		SPA         bool     `yaml:"SPA"`
+		SpaRoot     string   `yaml:"SPA_ROOT"`
+		SpaIndex    string   `yaml:"SPA_INDEX"`
 	}
 )
 
@@ -38,6 +41,9 @@ const (
 	tlsCertKey     = "TLS_CERT"
 	tlsKeyKey      = "TLS_KEY"
 	urlPrefixKey   = "URL_PREFIX"
+	SPA            = "SPA"
+	SpaRoot        = "SPA_ROOT"
+	SpaIndex       = "SPA_INDEX"
 )
 
 var (
@@ -51,6 +57,9 @@ var (
 	defaultTLSKey      = ""
 	defaultURLPrefix   = ""
 	defaultCors        = false
+	defaultSPA         = false
+	defaultSpaRoot     = "/web"
+	defaultSpaIndex    = "index.html"
 )
 
 func init() {
@@ -69,6 +78,9 @@ func setDefaults() {
 	Get.TLSKey = defaultTLSKey
 	Get.URLPrefix = defaultURLPrefix
 	Get.Cors = defaultCors
+	Get.SPA = defaultSPA
+	Get.SpaRoot = defaultSpaRoot
+	Get.SpaIndex = defaultSpaIndex
 }
 
 // Load the configuration file.
@@ -118,6 +130,9 @@ func overrideWithEnvVars() {
 	Get.TLSKey = envAsStr(tlsKeyKey, Get.TLSKey)
 	Get.URLPrefix = envAsStr(urlPrefixKey, Get.URLPrefix)
 	Get.Referrers = envAsStrSlice(referrersKey, Get.Referrers)
+	Get.SPA = envAsBool(SPA, Get.SPA)
+	Get.SpaRoot = envAsStr(SpaRoot, Get.SpaRoot)
+	Get.SpaIndex = envAsStr(SpaIndex, Get.SpaIndex)
 }
 
 // validate the configuration.

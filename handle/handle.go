@@ -83,6 +83,17 @@ func Basic(serveFile FileServerFunc, folder string) http.HandlerFunc {
 	}
 }
 
+// Basic file handler servers files from the passed folder.
+func Spa(serveFile FileServerFunc, folder string, spaPrefix string, spaIndex string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if !strings.HasPrefix(r.URL.Path, spaPrefix) {
+			serveFile(w, r, folder+"/"+spaPrefix+"/"+spaIndex)
+			return
+		}
+		serveFile(w, r, folder+r.URL.Path)
+	}
+}
+
 // Prefix file handler is an alternative to Basic where a URL prefix is removed
 // prior to serving a file (http://my.machine/prefix/file.txt will serve
 // file.txt from the root of the folder being served (ignoring 'prefix')).

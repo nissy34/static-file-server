@@ -49,7 +49,14 @@ func handlerSelector() (handler http.HandlerFunc) {
 	// Choose and set the appropriate, optimized static file serving function.
 	if 0 == len(config.Get.URLPrefix) {
 		handler = handle.Basic(serveFileHandler, config.Get.Folder)
-	} else {
+	} else if config.Get.SPA {
+		handler = handle.Spa(
+			serveFileHandler,
+			config.Get.Folder,
+			config.Get.SpaRoot,
+			config.Get.SpaIndex)
+	}
+	{
 		handler = handle.Prefix(
 			serveFileHandler,
 			config.Get.Folder,
