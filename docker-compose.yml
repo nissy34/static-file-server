@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    static-raw:
+        image: nissy34/static-file-server
+        build: .
+        ports:  [1234:1234]
+        environment: 
+            SPA: "true"
+            SPA_ROOT: web
+            DEBUG: "true"
+            SHOW_LISTING: "false"
+        volumes: 
+            - ./web:/web
+
+    static-full:
+        image: nissy34/static-file-server-full
+        ports:  [1111:1234]
+        environment: 
+            DEBUG: "true"
+

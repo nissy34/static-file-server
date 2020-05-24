@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -83,14 +84,32 @@ func Basic(serveFile FileServerFunc, folder string) http.HandlerFunc {
 	}
 }
 
+// fileExists checks if a file exists and is not a directory before we
+// try using it to prevent further errors.
+func fileExists(filename string) bool {
+
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) || info == nil {
+		return false
+	}
+	f := !info.IsDir()
+
+	return f
+
+}
+
 // Basic file handler servers files from the passed folder.
 func Spa(serveFile FileServerFunc, folder string, spaPrefix string, spaIndex string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if !strings.HasPrefix(r.URL.Path, spaPrefix) {
-			serveFile(w, r, folder+"/"+spaPrefix+"/"+spaIndex)
-			return
+
+		if !fileExists(folder+r.URL.Path) && strings.HasPrefix(r.URL.Path, "/"+spaPrefix) {
+
+			serveFile(w, r, folder+"/"+spaPrefix+"/")
+
+		} else {
+			serveFile(w, r, folder+r.URL.Path)
 		}
-		serveFile(w, r, folder+r.URL.Path)
+
 	}
 }
 

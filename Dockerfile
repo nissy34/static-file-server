@@ -31,10 +31,3 @@ USER static
 ENTRYPOINT ["/serve"]
 CMD []
 
-# Metadata
-LABEL life.apets.vendor="Halverneus" \
-    life.apets.url="https://github.com/halverneus/static-file-server" \
-    life.apets.name="Static File Server" \
-    life.apets.description="A tiny static file server" \
-    life.apets.version="v1.8.0" \
-    life.apets.schema-version="1.0"
