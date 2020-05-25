@@ -14,7 +14,7 @@ services:
 
     static-full:
         image: nissy34/static-file-server-full
-        ports:  [1111:1234]
+        ports:  [1111:8080]
         environment: 
             DEBUG: "true"
 

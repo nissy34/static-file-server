@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/tomasen/realip"
 )
 
 var (
@@ -51,10 +53,11 @@ func WithReferrers(serveFile FileServerFunc, referrers []string) FileServerFunc 
 func WithLogging(serveFile FileServerFunc) FileServerFunc {
 	return func(w http.ResponseWriter, r *http.Request, name string) {
 		referer := r.Referer()
+		clientIP := realip.FromRequest(r)
 		if 0 == len(referer) {
 			log.Printf(
 				"REQ from '%s': %s %s %s%s -> %s\n",
-				r.RemoteAddr,
+				clientIP,
 				r.Method,
 				r.Proto,
 				r.Host,
@@ -64,7 +67,7 @@ func WithLogging(serveFile FileServerFunc) FileServerFunc {
 		} else {
 			log.Printf(
 				"REQ from '%s' (REFERER: '%s'): %s %s %s%s -> %s\n",
-				r.RemoteAddr,
+				clientIP,
 				referer,
 				r.Method,
 				r.Proto,
